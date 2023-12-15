@@ -1323,7 +1323,7 @@ void is_sec_check_module_state(struct is_rom_info *finfo)
 #define ADDR_SIZE	2
 int is_i2c_read(struct i2c_client *client, void *buf, u32 addr, size_t size)
 {
-	const u32 addr_size` = 2, max_retry = 2;
+	const u32 addr_size = 2, max_retry = 2;
 	u8 addr_buf[ADDR_SIZE];
 	int retries = max_retry;
 	int ret = 0;
