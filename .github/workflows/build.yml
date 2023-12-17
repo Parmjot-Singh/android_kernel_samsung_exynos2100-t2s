@@ -1,0 +1,90 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Build kernel packages
+on:
+#  push:
+#    branches:
+#      - 'droidian'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build packages
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    container: 
+      image: quay.io/droidian/build-essential:trixie-amd64
+      options: -it --rm
+      volumes:
+        - .:/buildd/sources
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+          ref: droidian
+          
+      - name: Update repositories
+        run: |
+          apt-get update
+          apt-get upgrade
+
+      - name: Build package
+        run: |
+          cd /buildd/sources
+          # this is probably not meant to be added but idk
+          rm -f debian/control
+          debian/rules debain/control
+
+          RELENG_HOST_ARCH="arm64" releng-build-package
+          
+      - name: Move packages to out directory
+        run: |
+          mkdir /out
+          cp ../*.deb /out/
+          ls /out
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-image
+          path: /out/*.deb
+          if-no-files-found: error
+          retention-days: 1
+
+  prepare:
+    runs-on: ubuntu-20.04
+    name: Create GitHub release
+    needs: build
+
+    steps:
+      - name: Tag latest
+        uses: tvdias/github-tagger@v0.0.1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          tag: latest
+
+  publish:
+    runs-on: ubuntu-20.04
+    needs: prepare
+
+    name: Publish linux-image
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: out
+
+      - name: Create latest release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: out/linux-image/*.deb
+          tag_name: latest
+          draft: false
+          prerelease: false
