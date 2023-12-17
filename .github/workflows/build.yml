@@ -41,7 +41,7 @@ jobs:
           cd /buildd/sources
           # this is probably not meant to be added but idk
           rm -f debian/control
-          debian/rules debain/control
+          debian/rules debian/control
 
           RELENG_HOST_ARCH="arm64" releng-build-package
           
