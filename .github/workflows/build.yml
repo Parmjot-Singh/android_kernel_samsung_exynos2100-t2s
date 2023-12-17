@@ -33,7 +33,9 @@ jobs:
         run: |
           apt-get update -y
           apt-get upgrade -y
-
+      - name: Install build dependencies
+        run: |
+          apt-get install linux-packaging-snippets -y
       - name: Build package
         run: |
           cd /buildd/sources
