@@ -1,0 +1,32 @@
+linux-android-samsung-t2s (0.0.0+git20231217204514.a618d06.droidian) trixie; urgency=medium
+
+  [ Josip Kelečić ]
+  * Makefile: revert back to upstream CC/CLANG values
+  * Makefile: export environment variables
+  * drivers: media: Fix variable length array usage in is-sec-define.c
+  * drivers: camera: explicitly specify parameters
+  * drivers: net: broadcom: updates from bcmdhd_101_24 driver
+  * drivers: Fix include path for dynamic_mipi/band_info.h
+  * drivers: tui: fix out of tree build
+  * drivers: samsung: fix format specifier mismatch in sec_reboot.c
+  * drivers: samsung: Fix variable length array usage in debug-snapshot-utils.c
+
+  [ Parmjot Singh ]
+  * Import G996BXXU9FWK2 kernel source
+  * add initial droidian structure
+  * defconfig: initial Droidian changes
+  * change to local toolchains
+  * Makefile: revert to non-hardcoded toolchain paths
+  * Switch clang to clang 12
+  * drivers: media: typo
+  * GKI: use Android ABI padding for SYSVIPC task_struct fields
+  * CI: initial draft for automatic kernel builds
+  * CI: accept updates from apt-get
+  * CI: add missing build dependency
+
+  [ Linux4 ]
+  * security: remove samsung proca
+  * security: remove samsung defex, dsms, five
+
+ -- Josip Kelečić <kelecicj@gmail.com>  Mon, 18 Dec 2023 09:45:14 +1300
+
